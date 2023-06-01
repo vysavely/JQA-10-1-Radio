@@ -6,28 +6,47 @@ import org.junit.jupiter.api.Test;
 public class RadioTest {
 
     @Test
-    public void setCurrenRadiostationOver9() { //попытка выбрать номер радиостанции вне допустимого диапазона, как меньще 0 таки выше 9
+    public void setCurrentRadiostationOverRange0() { //попытка выбрать номер радиостанции вне допустимого диапазона, меньше 0
         Radio radio = new Radio();
-        radio.setCurrentRadioStation(10);
-
-        int expected = 0;
-        int actual = radio.currentRadioStation;
-
-        Assertions.assertEquals(expected, actual);
-
-        System.out.println("След. станция. Номер станции " + actual + " Ожидаемый " + expected);
-
         radio.setCurrentRadioStation(-10);
 
-        actual = radio.currentRadioStation;
+        int expected = 0;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
-        System.out.println("След. станция. Номер станции " + actual + " Ожидаемый " + expected);
+
+        System.out.println("Тест 1-1. Граничные значения -10. Номер станции " + actual + " Ожидаемый " + expected);
 
     }
 
     @Test
-    public void nextStTst() { // тест проверки переключения станции на следующую (next)
+    public void setCurrentRadiostationOverRange9() { //попытка выбрать номер радиостанции вне допустимого диапазона, больше 9
+        Radio radio = new Radio();
+        radio.setCurrentRadioStation(10);
+
+        int expected = 0;
+        int actual = radio.getCurrentRadioStation();
+
+        Assertions.assertEquals(expected, actual);
+
+        System.out.println("Тест 1-2. Граничные значения 10. Номер станции " + actual + " Ожидаемый " + expected);
+    }
+
+    @Test
+    public void setCurrentRadiostationWithinRange() { //попытка выбрать номер радиостанции в пределах допустимого диапазона
+        Radio radio = new Radio();
+        radio.setCurrentRadioStation(5);
+
+        int expected = 5;
+        int actual = radio.getCurrentRadioStation();
+
+        Assertions.assertEquals(expected, actual);
+
+        System.out.println("Тест 1-3. Значение в пределах дапазона 5. Номер станции " + actual + " Ожидаемый " + expected);
+    }
+
+    @Test
+    public void nextStationTest() { // тест проверки переключения станции на следующую (next) в пределах диапазона
         Radio radio = new Radio();
 
         radio.setCurrentRadioStation(5);
@@ -35,15 +54,31 @@ public class RadioTest {
         radio.nextStation();
 
         int expected = 6;
-        int actual = radio.currentRadioStation;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
 
-        System.out.println("След. станция. Номер станции " + actual + " Ожидаемый " + expected);
+        System.out.println("След. станция в пределах диапазона. Номер станции " + actual + " Ожидаемый " + expected);
     }
 
     @Test
-    public void nextStTst9() { // тест проверки переключения станции вперёд при граничном значении 9 (next)
+    public void nextStationTestIf0() { // тест проверки переключения станции вперёд при граничном значении 0 (next)
+        Radio radio = new Radio();
+
+        radio.setCurrentRadioStation(0);
+
+        radio.nextStation();
+
+        int expected = 1;
+        int actual = radio.getCurrentRadioStation();
+
+        Assertions.assertEquals(expected, actual);
+
+        System.out.println("След. станция, если 0. Номер станции " + actual + " Ожидаемый " + expected);
+    }
+
+    @Test
+    public void nextStationTestIf9() { // тест проверки переключения станции вперёд при граничном значении 9 (next)
         Radio radio = new Radio();
 
         radio.setCurrentRadioStation(9);
@@ -51,7 +86,7 @@ public class RadioTest {
         radio.nextStation();
 
         int expected = 0;
-        int actual = radio.currentRadioStation;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
 
@@ -59,20 +94,21 @@ public class RadioTest {
     }
 
     @Test
-    public void nextStTst0() { // тест проверки переключения станции вперёд при граничном значении 9 (next)
+    public void nextStationTestOverRange() { // тест проверки переключения станции вперёд при граничном значении -1 (next)
         Radio radio = new Radio();
 
         radio.setCurrentRadioStation(-1);
 
         radio.nextStation();
 
-        int expected = 0;
-        int actual = radio.currentRadioStation;
+        int expected = 1;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
 
-        System.out.println("След. станция, если 9. Номер станции " + actual + " Ожидаемый " + expected);
+        System.out.println("След. станция, если -1. Номер станции " + actual + " Ожидаемый " + expected);
     }
+
 
     @Test
     public void prevStTst() { //тест переключения станции на предидущую (prev)
@@ -82,7 +118,7 @@ public class RadioTest {
         radio.prevStation();
 
         int expected = 4;
-        int actual = radio.currentRadioStation;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
 
@@ -97,30 +133,54 @@ public class RadioTest {
         radio.prevStation();
 
         int expected = 9;
-        int actual = radio.currentRadioStation;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
         System.out.println("Предидущая станция, если 0. Номер станции " + actual + " Ожидаемый " + expected);
     }
 
     @Test
-    public void prevStTstBelow0() { //тест переключения станции на предидущую при граничном значении -1 и 10 (prev)
+    public void prevStTstIf9() { //тест переключения станции на предидущую при граничном значении 9 (prev)
+        Radio radio = new Radio();
+
+        radio.setCurrentRadioStation(9);
+        radio.prevStation();
+
+        int expected = 8;
+        int actual = radio.getCurrentRadioStation();
+
+        Assertions.assertEquals(expected, actual);
+        System.out.println("Предидущая станция, если 9. Номер станции " + actual + " Ожидаемый " + expected);
+
+    }
+
+    @Test
+    public void prevStTstBelow0() { //тест переключения станции на предидущую при граничном значении -1 (prev)
         Radio radio = new Radio();
 
         radio.setCurrentRadioStation(-1);
         radio.prevStation();
 
         int expected = 9;
-        int actual = radio.currentRadioStation;
+        int actual = radio.getCurrentRadioStation();
 
         Assertions.assertEquals(expected, actual);
-        System.out.println("Предидущая станция, если 0. Номер станции " + actual + " Ожидаемый " + expected);
+        System.out.println("Предидущая станция, если -1. Номер станции " + actual + " Ожидаемый " + expected);
+
+    }
+
+    @Test
+    public void prevStTstIF10() { //тест переключения станции на предидущую при граничном значении 10 (prev)
+        Radio radio = new Radio();
 
         radio.setCurrentRadioStation(10);
         radio.prevStation();
 
+        int expected = 9;
+        int actual = radio.getCurrentRadioStation();
+
         Assertions.assertEquals(expected, actual);
-        System.out.println("Предидущая станция, если 0. Номер станции " + actual + " Ожидаемый " + expected);
+        System.out.println("Предидущая станция, если 10. Номер станции " + actual + " Ожидаемый " + expected);
 
     }
 
