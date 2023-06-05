@@ -2,66 +2,80 @@ package ru.netology.services;
 
 public class Radio {
 
-    private int currentRadioStation;
-
     private int currentVolume;
+    private int currentRadioStation;
+    private int quantityRadiostations;
+    private int minNumberRadiostation = 0;
+    private int maxNumberRadiostation;
 
-    public int getCurrentRadioStation() {
+
+
+    public Radio(int quantityRadiostationsInput) { // конструктор для работы с внешним значением кол-ва станций, через переменную quantityRadiostationsInput
+        this.quantityRadiostations = quantityRadiostationsInput;
+        this.maxNumberRadiostation = quantityRadiostations - 1; // макс номер станции = кол-во станций минус 1, т.к. нумарция с 0.
+    }
+
+    public Radio() { //конструктор для работы с дефолтным значением "10"
+        this.quantityRadiostations = 10; // тут указано значение по дефолту из задания - 10
+        this.maxNumberRadiostation = quantityRadiostations - 1;
+    }
+
+    public int getCurrentRadioStation() { //геттер текущего номера станции
         return currentRadioStation;
     }
 
-    public void setCurrentRadioStation(int newRadiostation) {
-        if (newRadiostation > 9) {
+    public void setCurrentRadioStation(int newRadiostation) { //сеттер текущего номера станции
+        if (newRadiostation > maxNumberRadiostation) {
             return;
         }
-        if (newRadiostation < 0) {
+        if (newRadiostation < minNumberRadiostation) {
             return;
         }
         currentRadioStation = newRadiostation;
     }
 
-    public void nextStation() {
-        if (currentRadioStation > 0) {
+    public void nextStation() { // переключение вперёд
+        if (currentRadioStation > minNumberRadiostation) {
             currentRadioStation++;
         }
-        if (currentRadioStation > 9) {
+        if (currentRadioStation > maxNumberRadiostation) {
             currentRadioStation = 0;
             return;
         }
-        if (currentRadioStation == 0) {
+        if (currentRadioStation == minNumberRadiostation) {
             currentRadioStation++;
         }
     }
 
-    public void prevStation() {
-        if (currentRadioStation < 9) {
+    public void prevStation() { //переключение назад
+        if (currentRadioStation < maxNumberRadiostation) {
             currentRadioStation--;
         }
-        if (currentRadioStation < 0) {
-            currentRadioStation = 9;
+        if (currentRadioStation < minNumberRadiostation) {
+            currentRadioStation = maxNumberRadiostation;
             return;
         }
-        if (currentRadioStation == 9) {
+        if (currentRadioStation == maxNumberRadiostation) {
             currentRadioStation--;
         }
 
     }
 
     public void setCurrentRadioStationDirectly(int newRadioStationDirectly) { //прямой ввод номер радиостанции с проверкой валидности вводимого номер (в пределах 0-9)
-        if (newRadioStationDirectly < 0) {
+        if (newRadioStationDirectly < minNumberRadiostation) {
             return;
         }
-        if (newRadioStationDirectly > 9) {
+        if (newRadioStationDirectly > maxNumberRadiostation) {
             return;
         }
         currentRadioStation = newRadioStationDirectly;
     }
 
-    public int getCurrentVolume() {
+    public int getCurrentVolume() { //геттер уровня громкости
         return currentVolume;
     }
 
-    public void setCurrentVolume(int newVolume) {
+    public void setCurrentVolume(int newVolume) { //сеттер уровня громкости
         if (newVolume > 100) {
             return;
         }
@@ -71,7 +85,7 @@ public class Radio {
         currentVolume = newVolume;
     }
 
-    public void increaseVolume() {
+    public void increaseVolume() { //увеличение громкости
         if (currentVolume < 100) {
             currentVolume++;
         }
@@ -80,7 +94,7 @@ public class Radio {
         }
     }
 
-    public void downVolume() {
+    public void downVolume() { //уменьшение громкости
         if (currentVolume > 0) {
             currentVolume--;
         }

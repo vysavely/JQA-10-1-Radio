@@ -3,7 +3,11 @@ package ru.netology.services;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+
 public class RadioTest {
+
+    int inputQuantityRadiostations = 30; // кол-во станций 30
+
 
     @Test
     public void setCurrentRadiostationOverRange0() { //попытка выбрать номер радиостанции вне допустимого диапазона, меньше 0
@@ -65,7 +69,7 @@ public class RadioTest {
     public void nextStationTestIf0() { // тест проверки переключения станции вперёд при граничном значении 0 (next)
         Radio radio = new Radio();
 
-        radio.setCurrentRadioStation(0);
+        //radio.setCurrentRadioStation(0);
 
         radio.nextStation();
 
@@ -223,6 +227,66 @@ public class RadioTest {
 
     }
 
+    @Test
+    public void setCurrentRadiostationInExtendedRange() { //Доп. тест на ввод номера "15" станции в пределах расширенного диапазона (0-29)
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(15);
+        Assertions.assertEquals(15, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void setCurrentRadiostationOverExtendedRange() { //Доп. тест на ввод номера "30" станции вне предела расширенного диапазона (0-29)
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(30);
+        Assertions.assertEquals(0, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void nextStationInExtendedRange() { //Доп. тест на переключение станции "вперёд" с 15 на 16 в пределах расширенного диапазона (0-29)
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(15);
+        radio.nextStation();
+        Assertions.assertEquals(16, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void nextStationOverExtendedRange() { //Доп. тест на переключение станции "вперёд" с 29 на 0
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(29);
+        radio.nextStation();
+        Assertions.assertEquals(0, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void previousStationInExtendedRange() { //Доп. тест на переключение станции "назад" с 15 на 14 в пределах расширенного диапазона (0-29)
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(15);
+        radio.prevStation();
+        Assertions.assertEquals(14, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void previousStationOverExtendedRange() { //Доп. тест на переключение станции "назад" с 0 на 29
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(0);
+        radio.prevStation();
+        Assertions.assertEquals(29, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void setStationDirectlyInExtendedRange() { // Тест прямого управление номером станции в пределах диапазона
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(15);
+        Assertions.assertEquals(15, radio.getCurrentRadioStation());
+    }
+
+    @Test
+    public void setStationDirectlyOverExtendedRange() { // Тест прямого управление номером станции вне пределов диапазона
+        Radio radio = new Radio(inputQuantityRadiostations);
+        radio.setCurrentRadioStation(30);
+        Assertions.assertEquals(0, radio.getCurrentRadioStation());
+    }
+
 
     @Test
     public void SetSound() { //тест возможности регулировки звука
@@ -318,4 +382,6 @@ public class RadioTest {
         Assertions.assertEquals(expected, actual);
         System.out.println("Регулировка звука ниже порога. Уровень звука " + actual + " Ожидаемый " + expected);
     }
+
+
 }
